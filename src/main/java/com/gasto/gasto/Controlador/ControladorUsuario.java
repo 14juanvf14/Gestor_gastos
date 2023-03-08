@@ -19,7 +19,6 @@ public class ControladorUsuario {
     public ResponseEntity<?> AgregarUsuario(@RequestBody Usuario usuario){
         Usuario usuarioAgregado = this.implement.agregarUsuario(usuario);
         return  ResponseEntity.status(HttpStatus.CREATED).body(usuarioAgregado);
-
     }
 
 }
