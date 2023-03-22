@@ -1,77 +1,126 @@
 package com.gasto.gasto;
 
-import com.gasto.gasto.Modelo.Usuario;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
+import java.util.Date;
 import com.gasto.gasto.Controlador.ControladorUsuario;
-import com.gasto.gasto.Service.UsuarioServiceIMP.UsuarioSIMP;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.gasto.gasto.Modelo.Usuario;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+import javax.validation.ValidationException;
+
+//@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ControladorUsuarioTest {
 
-    @Mock
-    private UsuarioSIMP usuarioService;
-
+    @Autowired
     @InjectMocks
-    private ControladorUsuario controladorUsuario;
+    private ControladorUsuario controlador;
 
-    private Usuario usuario;
 
-    @Before
-    public void setUp() {
-        usuario = new Usuario();
-        usuario.setId(1);
-        usuario.setEstado(1);
+    @Test
+    public void agregarUsuario_Valido() {
+        Usuario usuario = new Usuario();
         usuario.setNombre("Juan Perez");
-        usuario.setCorreo("juan.perez@gmail.com");
+        usuario.setCorreo("juanDa@gmail.com");
+        usuario.setEstado(0);
         usuario.setFecha_ingreso(new Date());
+
+        ResponseEntity<?> response = controlador.AgregarUsuario(usuario);
+        Usuario usuarioAgregado = (Usuario) response.getBody();
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(usuarioAgregado);
+        assertEquals(usuario.getNombre(), usuarioAgregado.getNombre());
+        assertEquals(usuario.getCorreo(), usuarioAgregado.getCorreo());
+        assertEquals(usuario.getFecha_ingreso(), usuarioAgregado.getFecha_ingreso());
     }
 
     @Test
-    public void agregarUsuario_debeRetornarUsuarioCreado() {
-        when(usuarioService.agregarUsuario(any(Usuario.class))).thenReturn(usuario);
-        ResponseEntity<?> respuesta = controladorUsuario.AgregarUsuario(usuario);
-        assertEquals(HttpStatus.CREATED, respuesta.getStatusCode());
-        assertEquals(usuario, respuesta.getBody());
-    }
+    public void agregarUsuario_NombreVacio() {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("");
+        usuario.setCorreo("juan@gmail.com");
+        usuario.setFecha_ingreso(new Date());
 
-
-    @Test
-    public void verUsuarios_debeRetornarListaUsuarios() {
-        List<Usuario> listaUsuarios = new ArrayList<>();
-        listaUsuarios.add(usuario);
-        when(usuarioService.verUsuarios()).thenReturn(listaUsuarios);
-        ResponseEntity<?> respuesta = controladorUsuario.VerUsuarios();
-        assertEquals(HttpStatus.OK, respuesta.getStatusCode());
-        assertEquals(listaUsuarios, respuesta.getBody());
+        assertThrows(ValidationException.class, () -> {
+            controlador.AgregarUsuario(usuario);
+        });
     }
 
     @Test
-    public void buscarUsuarioID_debeRetornarUsuarioPorId() {
-        when(usuarioService.buscarUsuarioID(anyInt())).thenReturn(usuario);
-        ResponseEntity<?> respuesta = controladorUsuario.BuscarUsuarioID(1);
-        assertEquals(HttpStatus.OK, respuesta.getStatusCode());
-        assertEquals(usuario, respuesta.getBody());
+    public void agregarUsuario_CorreoInvalido() {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Juan Perez");
+        usuario.setCorreo("correo_invalido");
+        usuario.setFecha_ingreso(new Date());
+
+        assertThrows(ValidationException.class, () -> {
+            controlador.AgregarUsuario(usuario);
+        });
     }
 
     @Test
-    public void eliminarUsuario_debeRetornarOk() {
-        ResponseEntity<?> respuesta = controladorUsuario.EliminarUsuario(1);
-        assertEquals(HttpStatus.OK, respuesta.getStatusCode());
-        verify(usuarioService, times(1)).eliminarUsuario(1);
+    public void agregarUsuario_FechaIngresoFutura() {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Juan Perez");
+        usuario.setCorreo("juan@gmail.com");
+        usuario.setFecha_ingreso(new Date(System.currentTimeMillis() + 86400000)); // fecha de mañana
+
+        assertThrows(ValidationException.class, () -> {
+            controlador.AgregarUsuario(usuario);
+        });
     }
+
+    @Test
+    public void testModificarUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setId(1);
+        usuario.setNombre("Test");
+        usuario.setCorreo("test@test.com");
+        usuario.setEstado(1);
+        usuario.setFecha_ingreso(new Date());
+
+        ResponseEntity<?> response = controlador.ModificarUsuario(usuario);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+
+    @Test
+    public void testVerUsuarios() {
+        ResponseEntity<?> response = controlador.VerUsuarios();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    public void testBuscarUsuarioID() {
+        int id = 1;
+
+        ResponseEntity<?> response = controlador.BuscarUsuarioID(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    public void testEliminarUsuario() {
+        int id = 1;
+
+        ResponseEntity<?> response = controlador.EliminarUsuario(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
 
 }
+
+

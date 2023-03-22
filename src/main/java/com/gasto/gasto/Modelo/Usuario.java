@@ -25,19 +25,18 @@ public class Usuario {
     private String correo;
     @Column(name = "fecha_ingreso")
     @NotNull(message = "La fecha de ingreso no puede estar vacía")
+    @PastOrPresent(message = "La fecha de ingreso debe ser pasada o presente")
     private Date fecha_ingreso;
 
 
     /**
      * get field @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     @Column(name = "id")
-
-      *
-      * @return id @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     @Column(name = "id")
-
+     *
+     * @return id @Id
+     * @GeneratedValue(strategy = GenerationType.IDENTITY)
+     * @Column(name = "id")
+     * @GeneratedValue(strategy = GenerationType.IDENTITY)
+     * @Column(name = "id")
      */
     public int getId() {
         return this.id;
@@ -82,8 +81,6 @@ public class Usuario {
      * get field @Column(name = "nombre")
      *
      * @return nombre @Column(name = "nombre")
-
-
      */
     public String getNombre() {
         return this.nombre;
@@ -104,7 +101,6 @@ public class Usuario {
      * get field @Column(name = "correo")
      *
      * @return correo @Column(name = "correo")
-
      */
     public String getCorreo() {
         return this.correo;

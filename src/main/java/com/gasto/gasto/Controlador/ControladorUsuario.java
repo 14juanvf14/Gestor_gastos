@@ -1,3 +1,4 @@
+
 package com.gasto.gasto.Controlador;
 
 import com.gasto.gasto.Modelo.Usuario;
@@ -69,5 +70,4 @@ public class ControladorUsuario {
         return new ValidationException(message);
     }
 }
-
 
