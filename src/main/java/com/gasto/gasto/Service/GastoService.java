@@ -5,7 +5,9 @@ import com.gasto.gasto.Modelo.Gasto;
 import java.util.List;
 
 public interface GastoService {
-    public Gasto agregarGasto(Gasto gasto);
-    public List<Gasto> verGastos();
-    public Gasto buscarGastoID(int id);
+    List<Gasto> findAll();
+    Gasto findById(Long id);
+    Gasto save(Gasto gasto);
+    void deleteById(Long id);
+    Gasto updateGasto(Gasto gasto);
 }

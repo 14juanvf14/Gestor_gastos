@@ -2,9 +2,12 @@ package com.gasto.gasto.Modelo;
 
 import lombok.*;
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.time.LocalDate;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
+
 
 @Getter
 @Setter
@@ -13,34 +16,30 @@ import java.util.List;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "usuarios")
-public class Usuario {
-
+@Table(name = "gestores")
+public class Gestor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
-    private long id;
-    @Column(name = "estado", nullable = false)
-    @Min(0)
-    @Max(1)
-    private int estado;
+    private Long id;
+
+    @NotNull
     @Column(name = "nombre", nullable = false)
     @NotBlank(message = "El nombre no puede estar vacio")
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", message = "El nombre no puede contener números o caracteres extraños")
     private String nombre;
+
+    @NotNull
     @Column(name = "email", nullable = false)
     @NotBlank(message = "El correo no puede estar vacío")
     @Email(message = "El correo no es válido")
     private String email;
-    @Column(name = "fecha_ingreso", nullable = false)
-    @NotNull(message = "La fecha de ingreso no puede estar vacía")
-    @PastOrPresent(message = "La fecha de ingreso debe ser pasada o presente")
-    private LocalDate fecha_ingreso;
 
-    @OneToMany(mappedBy = "usuario")
-    private List<Gasto> gastos;
+    @NotNull
+    @Column(name = "password", nullable = false)
+    @NotBlank(message = "La clave no puede estar vacío")
+    private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "gestor_id")
-    private Gestor gestor;
+    @OneToMany(mappedBy = "gestor")
+    private List<Usuario> usuarios;
 }
