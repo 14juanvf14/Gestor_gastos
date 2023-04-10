@@ -17,6 +17,10 @@ public class GestorController {
     @Autowired
     private GestorService gestorService;
 
+    public GestorController(GestorService gestorService) {
+        this.gestorService = gestorService;
+    }
+
     @GetMapping
     public List<Gestor> findAll() {
         return gestorService.getAll();

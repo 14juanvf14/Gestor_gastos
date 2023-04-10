@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class UsuarioServiceTest {
+public class UsuarioServiceImplTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
