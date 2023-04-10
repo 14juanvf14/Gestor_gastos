@@ -1,4 +1,5 @@
 package com.gasto.gasto.Modelo;
+import com.gasto.gasto.Modelo.Gestor;
 import com.gasto.gasto.Repository.GestorRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

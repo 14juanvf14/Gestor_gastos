@@ -5,10 +5,9 @@ import com.gasto.gasto.Excepciones.ResourceNotFoundException;
 import com.gasto.gasto.Modelo.Usuario;
 import com.gasto.gasto.Service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 
 import java.util.List;
 import java.util.Optional;

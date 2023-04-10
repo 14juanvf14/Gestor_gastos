@@ -1,14 +1,16 @@
 package com.gasto.gasto.Modelo;
 
+import com.gasto.gasto.Modelo.Gasto;
+import com.gasto.gasto.Modelo.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
 class UsuarioTest {

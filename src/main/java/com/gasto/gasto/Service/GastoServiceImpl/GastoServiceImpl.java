@@ -4,9 +4,9 @@ import com.gasto.gasto.Modelo.Gasto;
 import com.gasto.gasto.Repository.GastoRepository;
 import com.gasto.gasto.Service.GastoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 
 @Service
