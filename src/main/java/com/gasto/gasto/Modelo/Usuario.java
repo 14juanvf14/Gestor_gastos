@@ -7,6 +7,11 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ *  Usuario
+ *  Esta entidad representa la tabla "usuarios" de la crud
+ *
+ */
 @Getter
 @Setter
 @Builder

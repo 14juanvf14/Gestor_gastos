@@ -1,6 +1,5 @@
 package com.gasto.gasto.Service;
 
-import com.gasto.gasto.Excepciones.ResourceNotFoundException;
 import com.gasto.gasto.Modelo.Usuario;
 import com.gasto.gasto.Repository.UsuarioRepository;
 import com.gasto.gasto.Service.UsuarioServiceImpl.UsuarioServiceImpl;
@@ -56,7 +55,7 @@ public class UsuarioServiceImplTest {
     @DisplayName("Test para crear un usuario")
     @Test
     @Rollback
-    void testSaveUser() throws ResourceNotFoundException {
+    void testSaveUser() {
 
         //given
         given(usuarioRepository.findByEmail(usuarioPrueba1.getEmail()))

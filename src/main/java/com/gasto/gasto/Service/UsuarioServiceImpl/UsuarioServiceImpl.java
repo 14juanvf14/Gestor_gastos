@@ -1,6 +1,5 @@
 package com.gasto.gasto.Service.UsuarioServiceImpl;
 
-import com.gasto.gasto.Excepciones.ResourceNotFoundException;
 import com.gasto.gasto.Modelo.Usuario;
 import com.gasto.gasto.Repository.UsuarioRepository;
 import com.gasto.gasto.Service.UsuarioService;
@@ -16,11 +15,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Override
-    public Usuario saveUser(Usuario usuario) throws ResourceNotFoundException {
-        Optional<Usuario> usuarioSaved = usuarioRepository.findByEmail(usuario.getEmail());
-        if(usuarioSaved.isPresent()){
-            throw new ResourceNotFoundException("El usuario con email "+usuario.getEmail()+" ya existe en el sistema");
-        }
+    public Usuario saveUser(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
@@ -42,6 +37,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void eliminarUsuario(long id) {
         usuarioRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Usuario> getUserByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
 

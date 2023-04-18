@@ -41,6 +41,11 @@ public class Gestor {
     @NotBlank(message = "La clave no puede estar vacío")
     private String password;
 
+    @NotNull
+    @Column(name = "rol", nullable = false)
+    @NotBlank(message = "El gestor debe tener un rol definido")
+    private String rol;
+
     @OneToMany(mappedBy = "gestor")
     private List<Usuario> usuarios;
 }
