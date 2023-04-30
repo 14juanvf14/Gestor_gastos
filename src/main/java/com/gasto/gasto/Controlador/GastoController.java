@@ -90,4 +90,5 @@ public class GastoController {
             throw new RequestException("E-106B", HttpStatus.NOT_FOUND, "Gasto no encontrado");
         }
     }
+
 }

@@ -22,13 +22,9 @@ import java.util.List;
 @Table(name = "usuarios")
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
+    @Id @Column(name = "id", nullable = false, unique = true)
     private long id;
-    @Column(name = "estado", nullable = false)
-    @Min(0)
-    @Max(1)
+    @Column(name = "estado", nullable = false) @Min(0) @Max(1)
     private int estado;
     @Column(name = "nombre", nullable = false)
     @NotBlank(message = "El nombre no puede estar vacio")

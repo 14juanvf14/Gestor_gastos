@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
+
 @Service
 public class GastoServiceImpl implements GastoService {
     @Autowired
@@ -38,4 +39,5 @@ public class GastoServiceImpl implements GastoService {
     public Gasto updateGasto(Gasto gasto) {
         return gastoRepository.save(gasto);
     }
+
 }

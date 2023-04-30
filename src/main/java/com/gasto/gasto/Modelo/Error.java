@@ -4,9 +4,7 @@ package com.gasto.gasto.Modelo;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 /**
- * @author Juan Vasquez
- * @FechaActualización 29/04/2023
- *  <p>
+ *
  *  Error:
  *  Representa a los errores generados en la aplicación
  *  Está acompañada de los siguientes atributos:
@@ -14,6 +12,7 @@ import org.springframework.http.HttpStatus;
  *  <li>Código de error</li>
  *  <li>Mensaje de error</li>
  *  <li>Estado Http de la solicitud donde se produjo el error</li>
+ *  </ul>
  *  <p>
  *  La librería lombok permite generar automáticamente los getter, setter
  *  y constructores de la clase, con las notaciones que le acompañan con @,
@@ -21,6 +20,10 @@ import org.springframework.http.HttpStatus;
  *  <p>
  *  La librería HttpStatus de SpringFramework permite representar un estado
  *  Http
+ *
+ *  @author Juan Vasquez
+ *  @version 1.0
+ *  @since 29/04/2023
  *
  */
 @Getter

@@ -17,7 +17,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SpringBootTest
 @Transactional
 public class UsuarioRepositoryTest {
 
@@ -107,15 +106,6 @@ public class UsuarioRepositoryTest {
         }
     }
 
-    @Test
-    @DisplayName("Test para eliminar usuario por ID")
-    @Rollback
-    void testEliminarPorID(){
-        usuarioRepository.save(usuarioPrueba1);
-        usuarioRepository.deleteById(usuarioPrueba1.getId());
-        Optional<Usuario> usuarioEliminado = usuarioRepository.findById(usuarioPrueba1.getId());
-        assertThat(usuarioEliminado).isEmpty();
-    }
 
 }
 

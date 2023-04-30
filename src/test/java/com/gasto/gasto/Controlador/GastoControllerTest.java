@@ -123,8 +123,4 @@ public class GastoControllerTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         Mockito.verify(gastoService, Mockito.times(1)).deleteById(gastoId);
     }
-
-
-
-
 }

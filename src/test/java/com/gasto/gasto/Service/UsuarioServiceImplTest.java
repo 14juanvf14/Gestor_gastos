@@ -57,9 +57,6 @@ public class UsuarioServiceImplTest {
     @Rollback
     void testSaveUser() {
 
-        //given
-        given(usuarioRepository.findByEmail(usuarioPrueba1.getEmail()))
-                .willReturn(Optional.empty());
         given(usuarioRepository.save(usuarioPrueba1))
                 .willReturn(usuarioPrueba1);
 

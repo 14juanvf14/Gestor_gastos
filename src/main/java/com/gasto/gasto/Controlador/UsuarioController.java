@@ -2,7 +2,9 @@
 package com.gasto.gasto.Controlador;
 
 import com.gasto.gasto.Excepciones.RequestException;
+import com.gasto.gasto.Modelo.Gasto;
 import com.gasto.gasto.Modelo.Usuario;
+import com.gasto.gasto.Service.GastoService;
 import com.gasto.gasto.Service.UsuarioService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private GastoService gastoService;
 
 
 
@@ -87,6 +92,7 @@ public class UsuarioController {
             throw new RequestException("U-106B", HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuario) {

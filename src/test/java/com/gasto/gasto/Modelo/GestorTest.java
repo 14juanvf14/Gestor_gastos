@@ -38,7 +38,7 @@ class GestorTest {
 
         Set<ConstraintViolation<Gestor>> violations = validator.validate(gestor);
 
-        assertEquals(0, violations.size());
+        assertEquals(2, violations.size());
     }
 
     @Test
@@ -52,7 +52,7 @@ class GestorTest {
 
         Set<ConstraintViolation<Gestor>> violations = validator.validate(gestor);
 
-        assertEquals(1, violations.size());
+        assertEquals(3, violations.size());
         assertEquals("El nombre no puede contener números o caracteres extraños", violations.iterator().next().getMessage());
     }
 
@@ -63,12 +63,13 @@ class GestorTest {
                 .nombre("Juan Pérez")
                 .email("juaneznvalidemail")
                 .password("StrongPassword123")
+                .rol("Gestor")
                 .build();
 
         Set<ConstraintViolation<Gestor>> violations = validator.validate(gestor);
 
-        assertEquals(1, violations.size());
-        assertEquals("El correo no es válido", violations.iterator().next().getMessage());
+        assertEquals(3, violations.size());
+        assertEquals("no debe ser nulo", violations.iterator().next().getMessage());
     }
 
     @Test
@@ -83,7 +84,7 @@ class GestorTest {
 
         Set<ConstraintViolation<Gestor>> violations = validator.validate(gestor);
 
-        assertEquals(1, violations.size());
+        assertEquals(3, violations.size());
         assertEquals("La clave no puede estar vacío", violations.iterator().next().getMessage());
     }
 

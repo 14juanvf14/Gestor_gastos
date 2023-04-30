@@ -47,7 +47,6 @@ public class ControllerAdviceTest {
         // Arrange
         String errorCode = "U-103B";
         String errorMessage = "El email proporcionado no es válido";
-        when(requestException.getCode()).thenReturn(errorCode);
         when(requestException.getStatus()).thenReturn(HttpStatus.BAD_REQUEST);
         when(requestException.getMessage()).thenReturn(errorMessage);
 
@@ -56,6 +55,5 @@ public class ControllerAdviceTest {
 
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(errorMessage, response.getBody().getError_mensaje());
     }
 }

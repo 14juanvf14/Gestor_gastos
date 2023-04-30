@@ -121,7 +121,7 @@ public class UsuarioControllerTest {
 
     @Test
     @Rollback
-    @DisplayName(value = "Prueba guardar user con email invalido")
+    @DisplayName(value = "Prueba guardar user con estado invalido")
     public void testSaveUserStateInvalid() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
@@ -141,7 +141,7 @@ public class UsuarioControllerTest {
 
     @Test
     @Rollback
-    @DisplayName(value = "Prueba guardar user con email invalido")
+    @DisplayName(value = "Prueba guardar user con fecha futura")
     public void testSaveUserDateFuture() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
@@ -464,7 +464,7 @@ public class UsuarioControllerTest {
                 .build();
 
         when(usuarioService.getUserById(usuarioId)).thenReturn(Optional.of(usuario));
-        when(usuarioService.getUserByEmail("juan.perez.martinez@gmail.com")).thenReturn(Optional.of(new Usuario()));
+        when(usuarioService.getUserByEmail("juan.perez.martinez@gmail.com")).thenReturn(Optional.of(usuario));
 
         Usuario usuarioActualizado = Usuario.builder()
                 .id(usuarioId)
@@ -552,24 +552,25 @@ public class UsuarioControllerTest {
     @Rollback
     @DisplayName("Actualizar con fecha futura")
     public void testUpdateUsuarioFutureDate() {
-        Usuario usuarioActual = Usuario.builder()
+        Usuario usuario = Usuario.builder()
                 .nombre("Juan Perez")
                 .email("juan.perez@gmail.com")
                 .estado(1)
                 .fecha_ingreso(LocalDate.now())
                 .build();
 
-        Usuario usuarioFuturo = Usuario.builder()
+        Usuario usuarioActualizado = Usuario.builder()
+                .id(usuario.getId())
                 .nombre("Maria Gomez")
                 .email("maria.gomez@gmail.com")
                 .estado(1)
                 .fecha_ingreso(LocalDate.now().plusDays(1)) // Fecha futura
                 .build();
 
-        when(usuarioService.saveUser(usuarioActual)).thenReturn(usuarioActual);
+        when(usuarioService.getUserById(usuario.getId())).thenReturn(Optional.of(usuario));
 
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.actualizarUsuario(usuarioActual.getId(),usuarioFuturo);
+            usuarioController.actualizarUsuario(usuario.getId(), usuarioActualizado);
         });
 
         assertEquals("U-105", exception.getCode());
@@ -594,15 +595,14 @@ public class UsuarioControllerTest {
                 .fecha_ingreso(LocalDate.now())// Fecha futura
                 .build();
 
-        when(usuarioService.saveUser(usuarioActual)).thenReturn(usuarioActual);
+        when(usuarioService.getUserById(usuarioActual.getId())).thenReturn(Optional.of(usuarioActual));
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuarioActual);
             usuarioController.actualizarUsuario(usuarioActual.getId(),usuarioFuturo);
         });
 
-        assertEquals("U-106B", exception.getCode());
+        assertEquals("U-102B", exception.getCode());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
 

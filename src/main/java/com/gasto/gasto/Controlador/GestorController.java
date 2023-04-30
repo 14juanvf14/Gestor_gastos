@@ -25,12 +25,12 @@ public class GestorController {
     }
 
     @GetMapping
-    public List<Gestor> findAll() {
-        // Agrega excepción if aquí
+    public ResponseEntity<List<Gestor>> findAll() {
         if (gestorService.getAll().isEmpty()) {
             throw new RequestException("G-106A", HttpStatus.NOT_FOUND, "No se encontraron gestores en la base de datos");
         }
-        return gestorService.getAll();
+        List<Gestor> gestores = gestorService.getAll();
+        return ResponseEntity.ok(gestores);
     }
 
 
@@ -55,12 +55,12 @@ public class GestorController {
             throw new RequestException("G-104",HttpStatus.BAD_REQUEST,"El nombre no puede estar vacio");
         }
         if (gestor.getEmail() == null || gestor.getEmail().equals("")){
-            throw new RequestException("U-102A",HttpStatus.BAD_REQUEST,"El e-mail ingresado no es valido o esta vacio");
+            throw new RequestException("G-102A",HttpStatus.BAD_REQUEST,"El e-mail ingresado no es valido o esta vacio");
         }
         if (!gestor.getEmail().matches("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b")) {
-            throw new RequestException("U-102B", HttpStatus.BAD_REQUEST, "El correo electrónico ingresado no es válido");
+            throw new RequestException("G-102B", HttpStatus.BAD_REQUEST, "El correo electrónico ingresado no es válido");
         }
-        if (!Objects.equals(gestor.getRol(), "Administrador") || !Objects.equals(gestor.getRol(), "Gestor")){
+        if (!Objects.equals(gestor.getRol(), "Administrador") && !Objects.equals(gestor.getRol(), "Gestor")){
             throw new RequestException("G-103",HttpStatus.BAD_REQUEST, "El rol solo puede ser Administrador o Gestor");
         }
         return ResponseEntity.ok().build();
@@ -74,12 +74,12 @@ public class GestorController {
                 throw new RequestException("G-104",HttpStatus.BAD_REQUEST,"El nombre no puede estar vacio");
             }
             if (gestor.getEmail() == null || gestor.getEmail().equals("")){
-                throw new RequestException("U-102A",HttpStatus.BAD_REQUEST,"El e-mail ingresado no es valido o esta vacio");
+                throw new RequestException("G-102A",HttpStatus.BAD_REQUEST,"El e-mail ingresado no es valido o esta vacio");
             }
             if (!gestor.getEmail().matches("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b")) {
-                throw new RequestException("U-102B", HttpStatus.BAD_REQUEST, "El correo electrónico ingresado no es válido");
+                throw new RequestException("G-102B", HttpStatus.BAD_REQUEST, "El correo electrónico ingresado no es válido");
             }
-            if (!Objects.equals(gestor.getRol(), "Administrador") || !Objects.equals(gestor.getRol(), "Gestor")){
+            if (!Objects.equals(gestor.getRol(), "Administrador") && !Objects.equals(gestor.getRol(), "Gestor")){
                 throw new RequestException("G-103",HttpStatus.BAD_REQUEST, "El rol solo puede ser Administrador o Gestor");
             }
             Gestor updatedGestor = currentGestor.get();

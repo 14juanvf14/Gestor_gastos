@@ -1,6 +1,7 @@
 package com.gasto.gasto.Modelo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class Gasto {
     @NotNull(message = "La fecha de ingreso no puede estar vacía")
     private String descripcion;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
