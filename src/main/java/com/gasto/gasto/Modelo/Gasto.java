@@ -10,6 +10,41 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
+/**
+ *  Gasto
+ *  <p>Es una entidad que hace parte del modelo de la aplicación en SpringBoot
+ *  la cual se encarga de representar los gastos por usuario, cuenta con los siguientes atributos:</p>
+ *  <ul>
+ *  <li>id: Identificador del gasto</li>
+ *  <li>fecha: Fecha en la que se efectuó el gasto</li>
+ *  <li>monto: valor del gasto</li>
+ *  <li>descripción: Corresponde a la descripción del gasto</li>
+ *  <li>usuario: este representa una relación con usuario al que pertenece el gasto</li>
+ *  </ul>
+ *
+ *  <p>
+ *  La librería lombok permite generar automáticamente los getter, setter
+ *  y constructores de la clase, con las notaciones que le acompañan con @,
+ *  por su parte Builder le permite la construcción de objetos cuando la clase es instanciada.
+ *  </p>
+ *  <p>
+ *  La librería de persistence, permite notaciones como @Entity, @Table, @Id, @Column,
+ *  permite representar el modelo en la capa de persistencia.
+ *  </p>
+ *  <p>
+ *  La libreria de validations permite poner restricciones sobre cada atributo, como
+ *  que la fecha noo sea futura, el dato no sea nulo, que sea positivo o cero.
+ *  </p>
+ *  <p>
+ *  La liberia de time, permite asignar un formato de fecha al atributo correspondiente de gastos.
+ *  </p>
+ *
+ *
+ *  @author Juan Vasquez
+ *  @version 1.0
+ *  @since 29/04/2023
+ *
+ */
 @Getter
 @Setter
 @Builder
