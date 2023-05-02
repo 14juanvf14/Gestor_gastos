@@ -18,7 +18,7 @@ import java.util.List;
  *  <li>nombre: nombre o apodo de gestor</li>
  *  <li>email: dirección de e-mail del gestor asignada por el admin</li>
  *  <li>password: contraseña del gestor asignada por el admin</li>
- *  <li>rol: El rol de gestor podra ser gestor o administrador, lo que permitira acceder a otras crud por rol</li>
+ *  <li>rol: El rol de gestor podría ser gestor o administrador, lo que permitira acceder a otras crud por rol</li>
  *  <li>usuario: Relación de uno a muchos que infiere en la gestión de cada gestor</li>
  *  </ul>
  *
@@ -32,11 +32,11 @@ import java.util.List;
  *  permite representar el modelo en la capa de persistencia.
  *  </p>
  *  <p>
- *  La libreria de validations permite poner restricciones sobre cada atributo, como
+ *  La librería de validations permite poner restricciones sobre cada atributo, como
  *  que la un patron, un e-mail o que el dato no sea nulo.
  *  </p>
  *  <p>
- *  La liberia util de java, nos permitira manejar listasd en la relación
+ *  La librería util de java, nos permitira manejar listas en la relación hacia usuarios
  *  </p>
  *
  *
