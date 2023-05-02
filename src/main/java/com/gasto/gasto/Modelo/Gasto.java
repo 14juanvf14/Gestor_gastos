@@ -36,7 +36,7 @@ import java.time.LocalDate;
  *  que la fecha noo sea futura, el dato no sea nulo, que sea positivo o cero.
  *  </p>
  *  <p>
- *  La liberia de time, permite asignar un formato de fecha al atributo correspondiente de gastos.
+ *  La librería de time, permite asignar un formato de fecha al atributo correspondiente de gastos.
  *  </p>
  *
  *
