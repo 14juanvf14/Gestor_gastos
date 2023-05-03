@@ -13,17 +13,42 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Controlador que maneja las solicitudes relacionadas con los gestores de la aplicación.
+ * @author Juan Vasquez
+ * @version 1.0
+ * @since 29/04/2023
+ * @see com.gasto.gasto.Modelo.Gestor
+ * @see com.gasto.gasto.Service.GestorService
+ * @see com.gasto.gasto.Excepciones.RequestException
+ */
 
 @RestController
 @RequestMapping("/gestor")
 public class GestorController {
+
+    /**
+     * Servicio para la entidad Gestor.
+     */
     @Autowired
     private GestorService gestorService;
 
+    /**
+     * Constructor que recibe un servicio de Gestor.
+     *
+     * @param gestorService Servicio de Gestor a utilizar.
+     */
     public GestorController(GestorService gestorService) {
         this.gestorService = gestorService;
     }
 
+    /**
+     * find all:
+     * Obtiene todos los gestores de la base de datos.
+     *
+     * @return ResponseEntity con una lista de Gestor y el código de estado HTTP correspondiente.
+     * @throws RequestException si no se encuentran gestores en la base de datos.
+     */
     @GetMapping
     public ResponseEntity<List<Gestor>> findAll() {
         if (gestorService.getAll().isEmpty()) {
@@ -33,7 +58,14 @@ public class GestorController {
         return ResponseEntity.ok(gestores);
     }
 
-
+    /**
+     * Find by id
+     * Obtiene un gestor de la base de datos por su identificador unico.
+     *
+     * @param id Identificador del gestor a buscar.
+     * @return ResponseEntity con el Gestor encontrado y el código de estado HTTP correspondiente.
+     * @throws RequestException si no se encuentra un gestor con el ID proporcionado.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Gestor> findById(@PathVariable Long id) {
         Optional<Gestor> gestor = gestorService.findById(id);
@@ -45,7 +77,15 @@ public class GestorController {
     }
 
 
-
+    /**
+     * Save:
+     * Guarda un nuevo Gestor en la base de datos.
+     *
+     * @param gestor Gestor a guardar.
+     * @return ResponseEntity con el Gestor guardado y el código de estado HTTP correspondiente.
+     * @throws RequestException si el ID del Gestor ya existe en la base de datos, si el nombre está vacío,
+     * si el email no es válido o está vacío, o si el rol no es Administrador o Gestor.
+     */
     @PostMapping
     public ResponseEntity<Gestor> save(@RequestBody @NotNull Gestor gestor) {
         if(gestorService.findById(gestor.getId()).isPresent()){
@@ -66,6 +106,15 @@ public class GestorController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Actualiza un Gestor existente en la base de datos por su identificador unico.
+     *
+     * @param id identificador del Gestor a actualizar.
+     * @param gestor Gestor con los datos actualizados.
+     * @return ResponseEntity con el Gestor actualizado y el código de estado HTTP correspondiente.
+     * @throws RequestException si no se encuentra un Gestor con el ID proporcionado, si el nombre está vacío,
+     * si el email no es válido o está vacío, o si el rol no es Administrador o Gestor.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Gestor> update(@PathVariable Long id, @RequestBody Gestor gestor) {
         Optional<Gestor> currentGestor = gestorService.findById(id);
@@ -93,7 +142,14 @@ public class GestorController {
         }
     }
 
-
+    /**
+     * Delete by id
+     * Elimina un Gestor existente en la base de datos por su Identificador.
+     *
+     * @param id Identificador del Gestor a eliminar.
+     * @return ResponseEntity con el código de estado HTTP correspondiente.
+     * @throws RequestException si no se encuentra un Gestor con el ID proporcionado.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         Optional<Gestor> gestor = gestorService.findById(id);

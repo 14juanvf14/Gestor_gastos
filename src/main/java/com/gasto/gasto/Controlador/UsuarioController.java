@@ -2,9 +2,7 @@
 package com.gasto.gasto.Controlador;
 
 import com.gasto.gasto.Excepciones.RequestException;
-import com.gasto.gasto.Modelo.Gasto;
 import com.gasto.gasto.Modelo.Usuario;
-import com.gasto.gasto.Service.GastoService;
 import com.gasto.gasto.Service.UsuarioService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador que maneja las solicitudes relacionadas con los usuarios de la aplicación.
+ * @author Juan Vasquez
+ * @version 1.0
+ * @since 29/04/2023
+ * @see com.gasto.gasto.Modelo.Usuario
+ * @see com.gasto.gasto.Service.UsuarioService
+ * @see com.gasto.gasto.Excepciones.RequestException
+ */
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -23,17 +30,13 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private GastoService gastoService;
-
-
 
     /**
      * Guarda un nuevo usuario en la base de datos.
      *
      * @param usuario El objeto de tipo Usuario que contiene los datos del usuario a guardar.
      * @return Un objeto ResponseEntity con estado HTTP 200 OK si el usuario se guarda exitosamente.
-     * @throws RequestException Si se producen errores en la validación de los datos del usuario.
+     * @throws RequestException Sí se producen errores en la validación de los datos del usuario.
      */
 
     @PostMapping
@@ -66,6 +69,7 @@ public class UsuarioController {
     }
 
     /**
+     * ver usuarios:
      * Obtiene la lista de todos los usuarios registrados en la base de datos.
      *
      * @return Un objeto ResponseEntity que contiene la lista de usuarios si se encuentran en la base de datos.
@@ -82,7 +86,14 @@ public class UsuarioController {
         }
     }
 
-
+    /**
+     * busca usuario por id:
+     * Obtiene un usuario de la base de datos por su Identificador.
+     *
+     * @param id Ientificador del usuario a buscar.
+     * @return Un objeto ResponseEntity con el usuario encontrado y el código de estado HTTP correspondiente.
+     * @throws RequestException Si el usuario no se encuentra en la base de datos.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarUsuarioID(@PathVariable Long id){
         Optional<Usuario> usuario = usuarioService.getUserById(id);
@@ -93,7 +104,15 @@ public class UsuarioController {
         }
     }
 
-
+    /**
+     * Actualizar usuario
+     * Actualiza un usuario existente en la base de datos por su identificador.
+     *
+     * @param id identinficador del usuario a actualizar.
+     * @param usuario Usuario con los datos actualizados.
+     * @return ResponseEntity con el usuario actualizado y el código de estado HTTP correspondiente.
+     * @throws RequestException Si el usuario no se encuentra en la base de datos o si se producen errores en la validación de los datos del usuario.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuario) {
         Optional<Usuario> usuarioGuardadoOptional = usuarioService.getUserById(id);
@@ -134,6 +153,14 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * eliminar usuario:
+     * Elimina un usuario existente en la base de datos por su ID.
+     *
+     * @param usuarioId ID del usuario a eliminar.
+     * @return ResponseEntity con el mensaje de éxito y el código de estado HTTP correspondiente.
+     * @throws RequestException Si el usuario no se encuentra en la base de datos.
+     */
     @DeleteMapping("{id}")
     public ResponseEntity<String> eliminarUsuario(@PathVariable("id") long usuarioId){
         Optional<Usuario> usuario = usuarioService.getUserById(usuarioId);
@@ -145,6 +172,14 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * Busca por email:
+     * Obtiene un usuario de la base de datos por su correo electrónico.
+     *
+     * @param email Correo electrónico del usuario a buscar.
+     * @return Un objeto ResponseEntity con el usuario encontrado y el código de estado HTTP correspondiente.
+     * @throws RequestException Si el usuario no se encuentra en la base de datos.
+     */
     @GetMapping("/email/{email}")
     public ResponseEntity<Usuario> buscarUsuarioPorEmail(@PathVariable String email) {
         Optional<Usuario> usuario = usuarioService.getUserByEmail(email);
