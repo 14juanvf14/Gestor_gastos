@@ -1,7 +1,5 @@
 package com.gasto.gasto.Modelo;
 
-import com.gasto.gasto.Modelo.Gasto;
-import com.gasto.gasto.Modelo.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
