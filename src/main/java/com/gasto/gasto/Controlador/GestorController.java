@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Controlador que maneja las solicitudes relacionadas con los gestores de la aplicación.
+ * Controlador que maneja las solicitudes relacionadas con los gestores de la aplicación springboot.
  * @author Juan Vasquez
  * @version 1.0
  * @since 29/04/2023
