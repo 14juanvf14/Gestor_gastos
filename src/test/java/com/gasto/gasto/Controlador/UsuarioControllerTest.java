@@ -41,7 +41,7 @@ public class UsuarioControllerTest {
     public void testSaveUser() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(1020253)
+                .id(1020253L)
                 .nombre("Nombre")
                 .estado(1)
                 .email("juan23v@gmail.com")
@@ -52,7 +52,7 @@ public class UsuarioControllerTest {
         when(usuarioService.saveUser(Mockito.any(Usuario.class))).thenReturn(usuario);
 
         // Act
-        ResponseEntity<Usuario> response = usuarioController.saveUser(usuario);
+        ResponseEntity<Usuario> response = usuarioController.saveUser("",usuario);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -64,7 +64,7 @@ public class UsuarioControllerTest {
     public void testSaveUserEmailnull() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(1020233)
+                .id(1020233L)
                 .nombre("Nombre")
                 .estado(1)
                 .email(null)
@@ -73,7 +73,7 @@ public class UsuarioControllerTest {
 
         // Act
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuario);
+            usuarioController.saveUser("",usuario);
         });
         assertEquals("U-102A", exception.getCode());
     }
@@ -84,7 +84,7 @@ public class UsuarioControllerTest {
     public void testSaveUserEmailInvalid() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(1020233)
+                .id(1020233L)
                 .nombre("Nombre")
                 .estado(1)
                 .email("juan123.com")
@@ -93,7 +93,7 @@ public class UsuarioControllerTest {
 
         // Act
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuario);
+            usuarioController.saveUser("",usuario);
         });
         assertEquals("U-102B", exception.getCode());
     }
@@ -104,7 +104,7 @@ public class UsuarioControllerTest {
     public void testSaveUserNameEmpty() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(1020233)
+                .id(1020233L)
                 .nombre("")
                 .estado(1)
                 .email("juan123@pepito.com")
@@ -113,7 +113,7 @@ public class UsuarioControllerTest {
 
         // Act
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuario);
+            usuarioController.saveUser("",usuario);
         });
         assertEquals("U-104", exception.getCode());
     }
@@ -125,7 +125,7 @@ public class UsuarioControllerTest {
     public void testSaveUserStateInvalid() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(1020233)
+                .id(1020233L)
                 .nombre("Nombre")
                 .estado(2)
                 .email("juan123@gmail.com")
@@ -134,7 +134,7 @@ public class UsuarioControllerTest {
 
         // Act
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuario);
+            usuarioController.saveUser("",usuario);
         });
         assertEquals("U-103", exception.getCode());
     }
@@ -145,7 +145,7 @@ public class UsuarioControllerTest {
     public void testSaveUserDateFuture() throws RequestException {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(1020233)
+                .id(1020233L)
                 .nombre("Nombre")
                 .estado(1)
                 .email("juan123@gmail.com")
@@ -154,7 +154,7 @@ public class UsuarioControllerTest {
 
         // Act
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuario);
+            usuarioController.saveUser("",usuario);
         });
         assertEquals("U-105", exception.getCode());
     }
@@ -169,7 +169,7 @@ public class UsuarioControllerTest {
 
         // Act
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.verUsuarios();
+            usuarioController.verUsuarios("");
         });
 
         // Assert
@@ -184,7 +184,7 @@ public class UsuarioControllerTest {
     public void testSaveUserWhenUserAlreadyExists() {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(123456)
+                .id(123456L)
                 .nombre("Juan Perez")
                 .email("juanperez@gmail.com")
                 .estado(1)
@@ -195,7 +195,7 @@ public class UsuarioControllerTest {
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuario);
+            usuarioController.saveUser("",usuario);
         });
 
         assertEquals("U-101", exception.getCode());
@@ -208,7 +208,7 @@ public class UsuarioControllerTest {
     public void testSaveUserWhenEmailAlreadyExists() {
         // Arrange
         Usuario usuario = Usuario.builder()
-                .id(123456)
+                .id(123456L)
                 .nombre("Juan Perez")
                 .email("juanperez@gmail.com")
                 .estado(1)
@@ -219,7 +219,7 @@ public class UsuarioControllerTest {
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.saveUser(usuario);
+            usuarioController.saveUser("",usuario);
         });
 
         assertEquals("U-102C", exception.getCode());
@@ -238,7 +238,7 @@ public class UsuarioControllerTest {
 
         when(usuarioService.getAllUsers()).thenReturn(usuarios);
 
-        ResponseEntity<List<Usuario>> response = usuarioController.verUsuarios();
+        ResponseEntity<List<Usuario>> response = usuarioController.verUsuarios("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(usuarios, response.getBody());
@@ -299,7 +299,7 @@ public class UsuarioControllerTest {
         when(usuarioService.getUserById(usuarioId)).thenReturn(Optional.of(usuario));
 
         // Act
-        ResponseEntity<String> response = usuarioController.eliminarUsuario(usuarioId);
+        ResponseEntity<String> response = usuarioController.eliminarUsuario("", usuarioId);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -317,7 +317,7 @@ public class UsuarioControllerTest {
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.eliminarUsuario(usuarioId);
+            usuarioController.eliminarUsuario("", usuarioId);
         });
 
         assertEquals("U-106B", exception.getCode());
@@ -325,42 +325,7 @@ public class UsuarioControllerTest {
         assertEquals("Usuario no encontrado", exception.getMessage());
     }
 
-    @Test
-    @Rollback
-    @DisplayName("Test eliminar usuario no encontrado en DB")
-    public void testBuscarUsuarioPorEmailWhenFound() throws RequestException {
-        String email = "juan.perez@gmail.com";
-        Usuario usuario = Usuario.builder()
-                .id(123456L)
-                .nombre("Juan Perez")
-                .email(email)
-                .estado(1)
-                .fecha_ingreso(LocalDate.now())
-                .build();
 
-        when(usuarioService.getUserByEmail(email)).thenReturn(Optional.of(usuario));
-
-        ResponseEntity<Usuario> response = usuarioController.buscarUsuarioPorEmail(email);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(usuario, response.getBody());
-    }
-
-    @Test
-    @Rollback
-    @DisplayName("Test buscar por email, email de usuario no encontrado en DB")
-    public void testBuscarUsuarioPorEmailNoEncontrado() {
-        String email = "correo.no.existe@gmail.com";
-
-        when(usuarioService.getUserByEmail(email)).thenReturn(Optional.empty());
-
-        RequestException exception = assertThrows(RequestException.class, () -> {
-            usuarioController.buscarUsuarioPorEmail(email);
-        });
-
-        assertEquals("U-107", exception.getCode());
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
-    }
 
     @Test
     @Rollback

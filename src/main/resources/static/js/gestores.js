@@ -249,6 +249,7 @@ async function getGestorID(id) {
                 radioGestor.checked = true;
             }
             identificador.value = result.id
+            identificador.disabled = true
 
         } else if (response.status === 403){
             window.location.href = 'index.html'
@@ -270,7 +271,6 @@ async function updateGestor(){
     var rol = document.querySelector('input[name="rolUpdate"]:checked').value;
     var identificador = document.getElementById("identificadorGestorUpdate").value;
     var password = document.getElementById("passwordGestorUpdate").value;
-    alert(rol)
     var gestor = {
         "id": identificador,
         "nombre": nombre,

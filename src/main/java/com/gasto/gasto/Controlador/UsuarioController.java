@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private AuthController authController;
+
 
     /**
      * Guarda un nuevo usuario en la base de datos.
@@ -40,14 +44,22 @@ public class UsuarioController {
      */
 
     @PostMapping
-    public ResponseEntity<Usuario> saveUser(@RequestBody @NotNull Usuario usuario){
+    public ResponseEntity<Usuario> saveUser(@RequestHeader(value = "Authorization") String token, @RequestBody @NotNull Usuario usuario){
         LocalDate fechaActual = LocalDate.now();
-
-        if(usuarioService.getUserById(usuario.getId()).isPresent()){
-            throw new RequestException("U-101", HttpStatus.BAD_REQUEST,"Identificación de usuario ya existe en la base");
+        if(!authController.validarSesion(token)){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if(usuario.getId()==null){
+            throw new RequestException("",HttpStatus.BAD_REQUEST,"El identificador esta vacio");
+        }
+        if(usuario.getFecha_ingreso()==null){
+            throw new RequestException("",HttpStatus.BAD_REQUEST,"La fecha no puede estar vacia");
         }
         if (usuario.getEmail() == null || usuario.getEmail().equals("")){
             throw new RequestException("U-102A",HttpStatus.BAD_REQUEST,"El e-mail ingresado no es valido o esta vacio");
+        }
+        if(usuarioService.getUserById(usuario.getId()).isPresent()){
+            throw new RequestException("U-101", HttpStatus.BAD_REQUEST,"Identificación de usuario ya existe en la base");
         }
         if (!usuario.getEmail().matches("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b")) {
             throw new RequestException("U-102B", HttpStatus.BAD_REQUEST, "El correo electrónico ingresado no es válido");
@@ -64,6 +76,7 @@ public class UsuarioController {
         if (usuario.getFecha_ingreso().isAfter(fechaActual)) {
             throw new RequestException("U-105", HttpStatus.BAD_REQUEST, "La fecha de nacimiento no puede ser una fecha futura");
         }
+
         usuarioService.saveUser(usuario);
         return ResponseEntity.ok().build();
     }
@@ -76,7 +89,10 @@ public class UsuarioController {
      * @throws RequestException Si no se encuentran usuarios en la base de datos.
      */
     @GetMapping
-    public ResponseEntity<List<Usuario>> verUsuarios() {
+    public ResponseEntity<List<Usuario>> verUsuarios(@RequestHeader(value = "Authorization") String token) {
+        if(!authController.validarSesion(token)){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
         List<Usuario> usuarios = usuarioService.getAllUsers();
         if (usuarios.isEmpty()) {
             throw new RequestException("U-106A", HttpStatus.NOT_FOUND, "No se encontraron usuarios");
@@ -95,7 +111,10 @@ public class UsuarioController {
      * @throws RequestException Si el usuario no se encuentra en la base de datos.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarUsuarioID(@PathVariable Long id){
+    public ResponseEntity<Usuario> buscarUsuarioID(@RequestHeader(value="Authorization") String token, @PathVariable Long id){
+        if(!authController.validarSesion(token)){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
         Optional<Usuario> usuario = usuarioService.getUserById(id);
         if (usuario.isPresent()) {
             return new ResponseEntity<>(usuario.get(), HttpStatus.OK);
@@ -114,7 +133,10 @@ public class UsuarioController {
      * @throws RequestException Si el usuario no se encuentra en la base de datos o si se producen errores en la validación de los datos del usuario.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable("id") Long id, @RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> actualizarUsuario(@RequestHeader(value = "Authorization") String token, @PathVariable("id") Long id, @RequestBody Usuario usuario) {
+        if(!authController.validarSesion(token)){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
         Optional<Usuario> usuarioGuardadoOptional = usuarioService.getUserById(id);
 
         LocalDate fechaActual = LocalDate.now();
@@ -132,13 +154,13 @@ public class UsuarioController {
                 throw new RequestException("U-102C", HttpStatus.BAD_REQUEST, "El email ya existe en la base de datos");
             }
             if (usuario.getEstado() < 0 || usuario.getEstado() > 1){
-                throw new RequestException("U-103",HttpStatus.BAD_REQUEST,"El estado solo puede ser 1 o 0");
+                throw new RequestException("U-103",HttpStatus.BAD_REQUEST,"El estado solo puede ser Activo o inactivo");
             }
             if(usuario.getNombre().isEmpty()){
-                throw new RequestException("U-104",HttpStatus.BAD_REQUEST,"El estado solo puede ser 1 o 0");
+                throw new RequestException("U-104",HttpStatus.BAD_REQUEST,"El nombre no puede estar vacio");
             }
             if (usuario.getFecha_ingreso().isAfter(fechaActual)) {
-                throw new RequestException("U-105", HttpStatus.BAD_REQUEST, "La fecha de nacimiento no puede ser una fecha futura");
+                throw new RequestException("U-105", HttpStatus.BAD_REQUEST, "La fecha de ingreso no puede ser una fecha futura");
             }
 
             usuarioGuardado.setEstado(usuario.getEstado());
@@ -162,31 +184,16 @@ public class UsuarioController {
      * @throws RequestException Si el usuario no se encuentra en la base de datos.
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<String> eliminarUsuario(@PathVariable("id") long usuarioId){
+    public ResponseEntity<String> eliminarUsuario(@RequestHeader(value = "Authorization") String token, @PathVariable("id") long usuarioId){
+        if(!authController.validarSesion(token)){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
         Optional<Usuario> usuario = usuarioService.getUserById(usuarioId);
         if (usuario.isPresent()) {
             usuarioService.eliminarUsuario(usuarioId);
             return new ResponseEntity<>("Usuario eliminado correctamente", HttpStatus.OK);
         } else {
             throw new RequestException("U-106B", HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
-    }
-
-    /**
-     * Busca por email:
-     * Obtiene un usuario de la base de datos por su correo electrónico.
-     *
-     * @param email Correo electrónico del usuario a buscar.
-     * @return Un objeto ResponseEntity con el usuario encontrado y el código de estado HTTP correspondiente.
-     * @throws RequestException Si el usuario no se encuentra en la base de datos.
-     */
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@PathVariable String email) {
-        Optional<Usuario> usuario = usuarioService.getUserByEmail(email);
-        if (usuario.isPresent()) {
-            return new ResponseEntity<>(usuario.get(), HttpStatus.OK);
-        } else {
-            throw new RequestException("U-107", HttpStatus.NOT_FOUND, "Usuario no encontrado por correo electrónico");
         }
     }
 }

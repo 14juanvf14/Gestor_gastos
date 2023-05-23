@@ -1,5 +1,6 @@
 package com.gasto.gasto.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -56,8 +57,8 @@ import java.util.List;
 @Table(name = "usuarios")
 public class Usuario {
 
-    @Id @Column(name = "id", nullable = false, unique = true)
-    private long id;
+    @Id @Column(name = "id", unique = true)
+    private Long id;
     @Column(name = "estado", nullable = false) @Min(0) @Max(1)
     private int estado;
     @Column(name = "nombre", nullable = false)
@@ -73,6 +74,7 @@ public class Usuario {
     @PastOrPresent(message = "La fecha de ingreso debe ser pasada o presente")
     private LocalDate fecha_ingreso;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario")
     private List<Gasto> gastos;
 }

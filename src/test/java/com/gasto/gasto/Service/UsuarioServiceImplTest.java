@@ -103,7 +103,7 @@ public class UsuarioServiceImplTest {
     @Rollback
     void testObtenerEmpleadoPorId(){
         //given
-        usuarioPrueba1.setId(1);
+        usuarioPrueba1.setId(1L);
         given(usuarioRepository.findById(1L)).willReturn(Optional.of(usuarioPrueba1));
 
         //when

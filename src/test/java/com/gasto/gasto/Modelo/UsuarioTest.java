@@ -66,7 +66,7 @@ class UsuarioTest {
                 .build();
         gastos.add(gasto1);
         Usuario usuario = Usuario.builder()
-                .id(1)
+                .id(1L)
                 .estado(1)
                 .nombre("Juan Perez")
                 .email("juan.perez@example.com")
