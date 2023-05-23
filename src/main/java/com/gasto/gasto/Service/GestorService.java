@@ -60,4 +60,14 @@ public interface GestorService {
     Gestor updategestor(Gestor gestorActualizado);
 
 
+    /**
+     * get user by email
+     * Obtiene un usuario por su dirección de correo electrónico.
+     *
+     * @param email la dirección de correo electrónico del gestor a buscar
+     * @return {@link Optional} que contiene el gestor encontrado, o vacío si no se encuentra el usuario
+     * @see Optional
+     * @see Gestor
+     */
+    Optional<Gestor> getGestorByEmail(String email);
 }

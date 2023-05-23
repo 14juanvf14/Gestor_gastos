@@ -45,7 +45,7 @@ public class GestorControllerTest {
 
         when(gestorService.findById(gestor.getId())).thenReturn(Optional.empty());
 
-        ResponseEntity<Gestor> response = gestorController.save(gestor);
+        ResponseEntity<Gestor> response = gestorController.save("", gestor);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -64,7 +64,7 @@ public class GestorControllerTest {
                 .build();
 
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.save(gestor);
+            gestorController.save("",gestor);
         });
         assertEquals("G-102A", exception.getCode());
     }
@@ -82,7 +82,7 @@ public class GestorControllerTest {
                 .build();
 
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.save(gestor);
+            gestorController.save("",gestor);
         });
         assertEquals("G-103", exception.getCode());
     }
@@ -99,7 +99,7 @@ public class GestorControllerTest {
                 .rol("Gestor")
                 .build();
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.save(gestor);
+            gestorController.save("",gestor);
         });
         assertEquals("G-102B", exception.getCode());
     }
@@ -116,7 +116,7 @@ public class GestorControllerTest {
                 .rol("Gestor")
                 .build();
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.save(gestor);
+            gestorController.save("",gestor);
         });
         assertEquals("G-104", exception.getCode());
     }
@@ -129,7 +129,7 @@ public class GestorControllerTest {
         when(gestorService.getAll()).thenReturn(Collections.emptyList());
 
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.findAll();
+            gestorController.findAll("");
         });
 
         assertEquals("G-106A", exception.getCode());
@@ -151,7 +151,7 @@ public class GestorControllerTest {
         when(gestorService.findById(gestor.getId())).thenReturn(Optional.of(gestor));
 
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.save(gestor);
+            gestorController.save("",gestor);
         });
 
         assertEquals("G-101", exception.getCode());
@@ -170,7 +170,7 @@ public class GestorControllerTest {
 
         when(gestorService.getAll()).thenReturn(gestores);
 
-        ResponseEntity<List<Gestor>> response = gestorController.findAll();
+        ResponseEntity<List<Gestor>> response = gestorController.findAll("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(gestores, response.getBody());
@@ -192,7 +192,7 @@ public class GestorControllerTest {
 
         when(gestorService.findById(id)).thenReturn(Optional.of(gestor));
 
-        ResponseEntity<Gestor> response = gestorController.findById(id);
+        ResponseEntity<Gestor> response = gestorController.findById("", id);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(gestor, response.getBody());
@@ -207,7 +207,7 @@ public class GestorControllerTest {
         when(gestorService.findById(id)).thenReturn(Optional.empty());
 
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.findById(id);
+            gestorController.findById("",id);
         });
 
         assertEquals("G-106B", exception.getCode());
@@ -230,7 +230,7 @@ public class GestorControllerTest {
         when(gestorService.findById(id)).thenReturn(Optional.of(gestor));
 
         // Act
-        ResponseEntity<Void> response = gestorController.deleteById(id);
+        ResponseEntity<Void> response = gestorController.deleteById("",id);
 
         // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -245,7 +245,7 @@ public class GestorControllerTest {
         when(gestorService.findById(id)).thenReturn(Optional.empty());
 
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.deleteById(id);
+            gestorController.deleteById("",id);
         });
 
         assertEquals("G-107", exception.getCode());
@@ -270,7 +270,7 @@ public class GestorControllerTest {
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.update(id, gestor);
+            gestorController.update("",id, gestor);
         });
 
         assertEquals("G-106B", exception.getCode());
@@ -300,7 +300,7 @@ public class GestorControllerTest {
                 .rol("Gestor")
                 .build();
 
-        ResponseEntity<Gestor> response = gestorController.update(id, gestorActualizado);
+        ResponseEntity<Gestor> response = gestorController.update("",id, gestorActualizado);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -331,7 +331,7 @@ public class GestorControllerTest {
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.update(id, gestorActualizado);
+            gestorController.update("",id, gestorActualizado);
         });
 
         assertEquals("G-102A", exception.getCode());
@@ -363,7 +363,7 @@ public class GestorControllerTest {
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.update(id, gestorActualizado);
+            gestorController.update("",id, gestorActualizado);
         });
 
         assertEquals("G-104", exception.getCode());
@@ -396,12 +396,11 @@ public class GestorControllerTest {
 
         // Act and Assert
         RequestException exception = assertThrows(RequestException.class, () -> {
-            gestorController.update(id, gestorActualizado);
+            gestorController.update("",id, gestorActualizado);
         });
         assertEquals("G-102A", exception.getCode());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
-
 
 }
 

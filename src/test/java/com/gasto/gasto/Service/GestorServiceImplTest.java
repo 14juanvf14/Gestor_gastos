@@ -120,4 +120,21 @@ public class GestorServiceImplTest {
         assertEquals(gestorActualizado, result);
         verify(gestorRepository).save(gestorActualizado);
     }
+
+    @Test
+    @Rollback
+    public void testGetGestorByEmail() {
+        String email = "juanv13@example.com";
+        Gestor gestor = Gestor.builder()
+                .id(2L).nombre("Juan")
+                .email(email)
+                .build();
+
+        when(gestorRepository.findByEmail(email)).thenReturn(Optional.of(gestor));
+
+        Optional<Gestor> result = gestorService.getGestorByEmail(email);
+
+        assertTrue(result.isPresent());
+        assertEquals(result.get().getEmail(), email);
+    }
 }

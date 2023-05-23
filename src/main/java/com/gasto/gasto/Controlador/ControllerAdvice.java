@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @version 1.0
  * @since 29/04/2023
  */
+
 @RestControllerAdvice
 public class ControllerAdvice  {
     /**
@@ -24,7 +25,7 @@ public class ControllerAdvice  {
      */
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<Error> RuntimeExceptionHandler(RuntimeException ex){
-        Error error = Error.builder().code("P-500").error_mensaje(ex.getMessage()).build();
+        Error error = Error.builder().code("P-500").error_mensaje(ex.getMessage()).status(HttpStatus.BAD_REQUEST).build();
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -36,7 +37,7 @@ public class ControllerAdvice  {
      */
     @ExceptionHandler(value = RequestException.class)
     public ResponseEntity<Error> RequestExceptionHandler(RequestException ex){
-        Error error = Error.builder().code(ex.getMessage()).error_mensaje(ex.getMessage()).build();
+        Error error = Error.builder().code(ex.getCode()).error_mensaje(ex.getMessage()).status(ex.getStatus()).build();
         return new ResponseEntity<>(error, ex.getStatus());
     }
 

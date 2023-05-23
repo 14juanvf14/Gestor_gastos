@@ -75,8 +75,4 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private List<Gasto> gastos;
-
-    @ManyToOne
-    @JoinColumn(name = "gestor_id")
-    private Gestor gestor;
 }

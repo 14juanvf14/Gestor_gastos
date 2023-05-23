@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 @Data
 public class RequestException extends RuntimeException{
 
+    private String mensaje;
     /**
      * Código de error de la excepción.
      */
@@ -33,9 +34,11 @@ public class RequestException extends RuntimeException{
      * @param status  el estado HTTP que se devuelve al cliente
      * @param mensaje el mensaje descriptivo de la excepción
      */
+
     public RequestException(String code, HttpStatus status, String mensaje){
         super(mensaje);
         this.code = code;
+        this.mensaje = mensaje;
         this.status = status;
 
     }

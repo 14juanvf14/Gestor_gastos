@@ -90,4 +90,18 @@ public class GestorServiceImpl implements GestorService {
     public Gestor updategestor(Gestor gestorActualizado) {
         return gestorRepository.save(gestorActualizado);
     }
+
+    /**
+     * get user by email
+     * Obtiene un usuario por su dirección de correo electrónico.
+     *
+     * @param email la dirección de correo electrónico del gestor a buscar
+     * @return {@link Optional} que contiene el gestor encontrado, o vacío si no se encuentra el usuario
+     * @see Optional
+     * @see Gestor
+     */
+    @Override
+    public Optional<Gestor> getGestorByEmail(String email){
+        return gestorRepository.findByEmail(email);
+    }
 }

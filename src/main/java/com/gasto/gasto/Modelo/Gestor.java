@@ -56,11 +56,9 @@ import java.util.List;
 @Table(name = "gestores")
 public class Gestor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", unique = true)
     private Long id;
 
-    @NotNull
     @Column(name = "nombre", nullable = false)
     @NotBlank(message = "El nombre no puede estar vacio")
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", message = "El nombre no puede contener números o caracteres extraños")
@@ -77,11 +75,7 @@ public class Gestor {
     @NotBlank(message = "La clave no puede estar vacío")
     private String password;
 
-    @NotNull
     @Column(name = "rol", nullable = false)
     @NotBlank(message = "El gestor debe tener un rol definido")
     private String rol;
-
-    @OneToMany(mappedBy = "gestor")
-    private List<Usuario> usuarios;
 }

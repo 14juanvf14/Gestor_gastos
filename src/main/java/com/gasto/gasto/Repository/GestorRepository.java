@@ -3,6 +3,8 @@ package com.gasto.gasto.Repository;
 import com.gasto.gasto.Modelo.Gestor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  *  Gestor repository
  *  Este repositorio es una interfaz que extiende todas las operaciones CRUD de
@@ -14,4 +16,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  */
 public interface GestorRepository extends JpaRepository<Gestor, Long> {
+    Optional<Gestor> findByEmail(String email);
 }
