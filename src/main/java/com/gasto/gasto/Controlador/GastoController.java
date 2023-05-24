@@ -50,14 +50,14 @@ public class GastoController {
     @GetMapping
     public ResponseEntity<List<Gasto>> findAll(@RequestHeader(value = "Authorization") String token) {
         if(token==null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (jwtUtil.isTokenExpired(token)) {
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         String gestorID = jwtUtil.getKey(token);
         if (gestorID == null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         List<Gasto> gastos = gastoService.findAll();
         if(gastos.isEmpty()){
@@ -76,14 +76,14 @@ public class GastoController {
     @GetMapping("/usuario/{id}")
     public ResponseEntity<List<Gasto>> getByUserID(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
         if(token==null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (jwtUtil.isTokenExpired(token)) {
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         String gestorID = jwtUtil.getKey(token);
         if (gestorID == null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         List<Gasto> gastos = gastoService.findByUsuario(id);
         if(gastos.isEmpty()){
@@ -104,14 +104,14 @@ public class GastoController {
     @GetMapping("/{id}")
     public ResponseEntity<Gasto> findById(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
         if(token==null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (jwtUtil.isTokenExpired(token)) {
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         String gestorID = jwtUtil.getKey(token);
         if (gestorID == null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         Gasto gasto = gastoService.findById(id);
         if (gasto != null) {
@@ -152,7 +152,7 @@ public class GastoController {
             throw new RequestException("E-102",HttpStatus.BAD_REQUEST,"El monto no puede ser menor a cero");
         }
         if (gasto.getFecha().isAfter(fechaActual) || gasto.getFecha().isBefore(usuario.getFecha_ingreso())) {
-            throw new RequestException("E-105", HttpStatus.BAD_REQUEST, "La fecha de nacimiento no puede ser una fecha futura o anterior a la fecha del registro del usuario");
+            throw new RequestException("E-105", HttpStatus.BAD_REQUEST, "La fecha de gasto no puede ser una fecha futura o anterior a la fecha del registro del usuario");
         }
         Gasto savedGasto = gastoService.save(gasto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedGasto);
@@ -170,14 +170,14 @@ public class GastoController {
     @PutMapping("/{id}")
     public ResponseEntity<Gasto> update(@RequestHeader(value = "Authorization") String token, @PathVariable Long id, @RequestBody Gasto gasto) {
         if(token==null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (jwtUtil.isTokenExpired(token)) {
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         String gestorID = jwtUtil.getKey(token);
         if (gestorID == null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         Optional<Gasto> currentGasto = Optional.ofNullable(gastoService.findById(id));
         LocalDate fechaActual = LocalDate.now();
@@ -191,7 +191,7 @@ public class GastoController {
             }
             Usuario usuario = usuarioService.getUserById(gasto.getUsuario().getId()).get();
             if (gasto.getFecha().isAfter(fechaActual) || gasto.getFecha().isBefore(usuario.getFecha_ingreso()))  {
-                throw new RequestException("E-105", HttpStatus.BAD_REQUEST, "La fecha de nacimiento no puede ser una fecha futura");
+                throw new RequestException("E-105", HttpStatus.BAD_REQUEST, "La fecha de gasto no puede ser una fecha futura");
             }
             updatedGasto.setFecha(gasto.getFecha());
             updatedGasto.setMonto(gasto.getMonto());
@@ -215,14 +215,14 @@ public class GastoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
         if(token==null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (jwtUtil.isTokenExpired(token)) {
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         String gestorID = jwtUtil.getKey(token);
         if (gestorID == null){
-            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+            throw new RequestException("S-001", HttpStatus.FORBIDDEN, "Token no valido");
         }
         Optional<Gasto> gasto = Optional.ofNullable(gastoService.findById(id));
         if (gasto.isPresent()) {

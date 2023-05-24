@@ -92,5 +92,4 @@ public class GastoServiceImpl implements GastoService {
     public List<Gasto> findByUsuario(Long id) {
         return gastoRepository.findByUsuarioId(id);
     }
-
 }

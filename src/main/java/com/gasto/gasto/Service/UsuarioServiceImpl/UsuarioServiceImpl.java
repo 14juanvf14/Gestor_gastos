@@ -105,6 +105,4 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Optional<Usuario> getUserByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
-
-
 }

@@ -99,6 +99,9 @@ async function getGestores() {
 
             // Agregar una fila por cada objeto en la respuesta
             result.forEach(function(gestor) {
+                if (gestor.id === 1010064467){
+
+                }else {
                 var row = tbody.insertRow();
                 row.insertCell().innerHTML = gestor.id;
                 row.insertCell().innerHTML = gestor.nombre;
@@ -109,6 +112,7 @@ async function getGestores() {
                     '<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">' +
                     '<a class="dropdown-item" href="#" onclick="openUpdateGestorForm('+gestor.id+')">Modificar gestor</a>' +
                     '<a class="dropdown-item" href="#" onclick="deleteGestorID('+gestor.id+')">Eliminar Gestor</a></div></div>';
+                }
             });
 
         } else if (response.status === 403){
