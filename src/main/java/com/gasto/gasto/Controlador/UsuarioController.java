@@ -4,6 +4,7 @@ package com.gasto.gasto.Controlador;
 import com.gasto.gasto.Excepciones.RequestException;
 import com.gasto.gasto.Modelo.Usuario;
 import com.gasto.gasto.Service.UsuarioService;
+import com.gasto.gasto.utils.JWTUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,7 +33,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private AuthController authController;
+    private JWTUtil jwtUtil;
 
 
     /**
@@ -45,8 +46,14 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<Usuario> saveUser(@RequestHeader(value = "Authorization") String token, @RequestBody @NotNull Usuario usuario){
-        LocalDate fechaActual = LocalDate.now();
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if(usuario.getId()==null){
@@ -73,10 +80,10 @@ public class UsuarioController {
         if(usuario.getNombre().isEmpty()){
             throw new RequestException("U-104",HttpStatus.BAD_REQUEST,"El nombre no puede estar vacio");
         }
+        LocalDate fechaActual = LocalDate.now();
         if (usuario.getFecha_ingreso().isAfter(fechaActual)) {
             throw new RequestException("U-105", HttpStatus.BAD_REQUEST, "La fecha de nacimiento no puede ser una fecha futura");
         }
-
         usuarioService.saveUser(usuario);
         return ResponseEntity.ok().build();
     }
@@ -90,7 +97,14 @@ public class UsuarioController {
      */
     @GetMapping
     public ResponseEntity<List<Usuario>> verUsuarios(@RequestHeader(value = "Authorization") String token) {
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         List<Usuario> usuarios = usuarioService.getAllUsers();
@@ -112,7 +126,14 @@ public class UsuarioController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarUsuarioID(@RequestHeader(value="Authorization") String token, @PathVariable Long id){
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         Optional<Usuario> usuario = usuarioService.getUserById(id);
@@ -134,15 +155,23 @@ public class UsuarioController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@RequestHeader(value = "Authorization") String token, @PathVariable("id") Long id, @RequestBody Usuario usuario) {
-        if(!authController.validarSesion(token)){
+        if(token==null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
-        Optional<Usuario> usuarioGuardadoOptional = usuarioService.getUserById(id);
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        Optional<Usuario> usuarioByID = usuarioService.getUserById(id);
+        Optional<Usuario> usuarioByEmail = usuarioService.getUserByEmail(usuario.getEmail());
 
         LocalDate fechaActual = LocalDate.now();
 
-        if (usuarioGuardadoOptional.isPresent()) {
-            Usuario usuarioGuardado = usuarioGuardadoOptional.get();
+        if (usuarioByID.isPresent()) {
+            Usuario usuarioGuardado = usuarioByID.get();
 
             if (usuario.getEmail() == null || usuario.getEmail().equals("")){
                 throw new RequestException("U-102A",HttpStatus.BAD_REQUEST,"El e-mail ingresado no es valido o esta vacio");
@@ -150,7 +179,7 @@ public class UsuarioController {
             if (!usuario.getEmail().matches("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b")) {
                 throw new RequestException("U-102B", HttpStatus.BAD_REQUEST, "El correo electrónico ingresado no es válido");
             }
-            if(usuarioService.getUserByEmail(usuario.getEmail()).isPresent()){
+            if(usuarioByEmail.isPresent() && !Objects.equals(usuarioByEmail.get().getId(), id)){
                 throw new RequestException("U-102C", HttpStatus.BAD_REQUEST, "El email ya existe en la base de datos");
             }
             if (usuario.getEstado() < 0 || usuario.getEstado() > 1){
@@ -185,7 +214,14 @@ public class UsuarioController {
      */
     @DeleteMapping("{id}")
     public ResponseEntity<String> eliminarUsuario(@RequestHeader(value = "Authorization") String token, @PathVariable("id") long usuarioId){
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         Optional<Usuario> usuario = usuarioService.getUserById(usuarioId);

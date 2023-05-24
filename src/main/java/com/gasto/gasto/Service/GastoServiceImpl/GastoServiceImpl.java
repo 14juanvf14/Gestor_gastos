@@ -79,17 +79,18 @@ public class GastoServiceImpl implements GastoService {
         gastoRepository.deleteById(id);
     }
 
+
     /**
-     * update gasto
+     * Listar gastos por usuarios
      * Actualizar un objeto "gasto" en la base de datos
      *
-     * @param gasto ingresa el gasto actualizado
-     * @return {@link Gasto} retorna el objeto gasto que se actualizo
+     * @param id del usuario que se desea buscar
+     * @return {@link Gasto}
      * @see Gasto
      */
     @Override
-    public Gasto updateGasto(Gasto gasto) {
-        return gastoRepository.save(gasto);
+    public List<Gasto> findByUsuario(Long id) {
+        return gastoRepository.findByUsuarioId(id);
     }
 
 }

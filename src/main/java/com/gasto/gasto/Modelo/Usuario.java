@@ -59,17 +59,17 @@ public class Usuario {
 
     @Id @Column(name = "id", unique = true)
     private Long id;
-    @Column(name = "estado", nullable = false) @Min(0) @Max(1)
+    @Column(name = "estado") @Min(0) @Max(1)
     private int estado;
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre")
     @NotBlank(message = "El nombre no puede estar vacio")
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", message = "El nombre no puede contener números o caracteres extraños")
     private String nombre;
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     @NotBlank(message = "El correo no puede estar vacío")
     @Email(message = "El correo no es válido")
     private String email;
-    @Column(name = "fecha_ingreso", nullable = false)
+    @Column(name = "fecha_ingreso")
     @NotNull(message = "La fecha de ingreso no puede estar vacía")
     @PastOrPresent(message = "La fecha de ingreso debe ser pasada o presente")
     private LocalDate fecha_ingreso;

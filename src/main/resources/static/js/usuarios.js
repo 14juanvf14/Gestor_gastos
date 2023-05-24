@@ -3,33 +3,7 @@ $(document).ready(function (){
     span = document.getElementById("nombreGestor")
     span.textContent = localStorage.getItem("nombre")
     setInterval(getUsuarios,10000)
-
-    let nombre = localStorage.getItem("nombre");
 });
-
-
-function openPopUpGasto() {
-    var table = document.getElementById("miTable");
-    table.classList.add("d-none")
-    var popup = document.getElementById("miPopup");
-    popup.classList.remove("d-none")
-    var parent = document.getElementById("content-wrapper");
-    parent.style.backgroundColor = "rgba(0,0,0,0.1)"
-    var btnAgregar = document.getElementById("btn-agregar");
-    btnAgregar.classList.add("d-none")
-
-}
-
-function cerrarPopup() {
-    var popup = document.getElementById("miPopup");
-    popup.classList.add("d-none")
-    var table = document.getElementById("miTable");
-    table.classList.remove("d-none")
-    var parent = document.getElementById("content-wrapper")
-    parent.style.backgroundColor = ""
-    var btnAgregar = document.getElementById("btn-agregar");
-    btnAgregar.classList.remove("d-none")
-}
 
 function openFormAddUser(){
     var table = document.getElementById("miTable");
@@ -66,7 +40,7 @@ function openFormUpdateUser(id){
     parent.style.backgroundColor = "rgba(0,0,0,0.1)"
     var btnAgregar = document.getElementById("btn-agregar");
     btnAgregar.classList.add("d-none")
-    var btnCancelar = document.getElementById("btn-cancelar");
+    var btnCancelar = document.getElementById("btn-cancelarUpdate");
     btnCancelar.classList.remove("d-none")
     getUserID(id)
 }
@@ -80,8 +54,15 @@ function closeFormUpdateUser(){
     parent.style.backgroundColor = ""
     var btnAgregar = document.getElementById("btn-agregar");
     btnAgregar.classList.remove("d-none")
-    var btnCancelar = document.getElementById("btn-cancelar");
+    var btnCancelar = document.getElementById("btn-cancelarUpdate");
     btnCancelar.classList.add("d-none")
+}
+
+function close_sesion() {
+    localStorage.removeItem("token")
+    localStorage.removeItem("nombre")
+    window.location.href = 'index.html'
+
 }
 
 
@@ -132,6 +113,8 @@ async function addUsuarios() {
             closeFormAddUser();
         } else if (response.status === 403) {
             window.location.href = 'index.html';
+            localStorage.removeItem("token")
+            localStorage.removeItem("nombre")
             alert("No tiene acceso a esta sección");
         } else {
             throw await response.json();
@@ -177,12 +160,14 @@ async function getUsuarios() {
                     var acciones = row.insertCell();
                     acciones.innerHTML = '<div class="dropdown mb-4 show"><button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">Acciones</button>' +
                         '<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">' +
-                        '<a class="dropdown-item" href="#" onclick="openFormUpdateUser('+usuario.id+')">Modificar usuario</a><a class="dropdown-item" href="#" onclick="deleteUserID(' + usuario.id + ')">Eliminar usuario</a><a class="dropdown-item" href="#" onclick="openPopUpGasto()">Ver gastos</a></div></div>';
+                        '<a class="dropdown-item" href="#" onclick="openFormUpdateUser('+usuario.id+')">Modificar usuario</a><a class="dropdown-item" href="#" onclick="deleteUserID(' + usuario.id + ')">Eliminar usuario</a><a class="dropdown-item" href="#" onclick="openPopUpGasto('+usuario.id+')">Ver gastos</a></div></div>';
                 });
             }
 
         } else if (response.status === 403) {
             window.location.href = 'index.html'
+            localStorage.removeItem("token")
+            localStorage.removeItem("nombre")
             alert("No tiene acceso a esta sección")
         } else {
             throw await response.json();
@@ -216,9 +201,11 @@ async function deleteUserID(id) {
         const currentURL = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
         const response = await fetch(currentURL + "/usuario/" + id + "", requestOptions);
         if (response.ok) {
-            alert("El gestor ha sido eliminado correctamente");
+            alert("El usuario ha sido eliminado correctamente");
         } else if (response.status === 403) {
             window.location.href = 'index.html';
+            localStorage.removeItem("token")
+            localStorage.removeItem("nombre")
             alert("No tiene acceso a esta sección");
         } else {
             throw await response.json();
@@ -325,6 +312,8 @@ async function updateUser(){
             closeFormUpdateUser();
         } else if (response.status === 403) {
             window.location.href = 'index.html';
+            localStorage.removeItem("token")
+            localStorage.removeItem("nombre")
             alert("No tiene acceso a esta sección");
         } else {
             throw await response.json();

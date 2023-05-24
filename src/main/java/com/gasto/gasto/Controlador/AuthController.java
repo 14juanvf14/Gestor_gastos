@@ -63,21 +63,4 @@ public class AuthController {
         }
     }
 
-    public Boolean validarSesion(String token){
-        if(token == null){
-            return false;
-        }
-        else {
-            String gestorID = jwtUtil.getKey(token);
-            Date currentDate = new Date();
-            Date expirationDate = jwtUtil.getExpirationDate(token);
-            if (expirationDate != null && expirationDate.before(currentDate)) {
-                return false;
-            }
-            if (gestorID == null){
-                return false;
-            }
-        }
-        return true;
-    }
 }

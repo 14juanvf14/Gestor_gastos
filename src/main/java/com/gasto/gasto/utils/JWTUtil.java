@@ -97,9 +97,23 @@ public class JWTUtil {
         return claims.getId();
     }
 
-    public Date getExpirationDate(String jwt) {
-        Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(key))
-                .parseClaimsJws(jwt).getBody();
-        return claims.getExpiration();
+    /**
+     * Metodo para validar si un token JWT ha expirado o no.
+     *
+     * @param jwt
+     * @return true si el token ha expirado, false en caso contrario.
+     */
+    public boolean isTokenExpired(String jwt) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(DatatypeConverter.parseBase64Binary(key))
+                    .parseClaimsJws(jwt)
+                    .getBody();
+            Date expiration = claims.getExpiration();
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            log.error("Error al validar el token JWT: {}", e.getMessage());
+            return true;
+        }
     }
 }

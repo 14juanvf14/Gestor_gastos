@@ -73,7 +73,6 @@ public class Gasto {
     @NotNull(message = "La fecha de ingreso no puede estar vacía")
     private String descripcion;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;

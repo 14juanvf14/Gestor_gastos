@@ -40,7 +40,7 @@ public class GestorController {
     private GestorService gestorService;
 
     @Autowired
-    private AuthController authController;
+    private JWTUtil jwtUtil;
 
     /**
      * Constructor que recibe un servicio de Gestor.
@@ -60,7 +60,14 @@ public class GestorController {
      */
     @GetMapping
     public ResponseEntity<List<Gestor>> findAll(@RequestHeader(value = "Authorization") @Nullable String token) {
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (gestorService.getAll().isEmpty()) {
@@ -80,7 +87,14 @@ public class GestorController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Gestor> findById(@RequestHeader(value = "Authorization") @Nullable String token, @PathVariable Long id) {
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         Optional<Gestor> gestor = gestorService.findById(id);
@@ -103,7 +117,14 @@ public class GestorController {
      */
     @PostMapping
     public ResponseEntity<Gestor> save(@RequestHeader(value = "Authorization") @Nullable String token, @RequestBody @NotNull Gestor gestor) {
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (gestor.getId() == null){
@@ -149,13 +170,23 @@ public class GestorController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Gestor> update(@RequestHeader(value = "Authorization") @Nullable String token, @PathVariable Long id, @RequestBody Gestor gestor) {
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         if (id == null){
             throw new RequestException("1", HttpStatus.BAD_REQUEST,"El id no puede estar vacio");
         }
         if (id==99999 && !Objects.equals(gestor.getEmail(), "admin@gasto.com")){
+            throw new RequestException("",HttpStatus.BAD_REQUEST,"Este es un administrador no modificable");
+        }
+        if (id==99999 && !Objects.equals(gestor.getRol(), "Administrador")){
             throw new RequestException("",HttpStatus.BAD_REQUEST,"Este es un administrador no modificable");
         }
         Optional<Gestor> currentGestor = gestorService.findById(id);
@@ -203,7 +234,14 @@ public class GestorController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@RequestHeader(value = "Authorization") @Nullable String token,@PathVariable Long id) {
-        if(!authController.validarSesion(token)){
+        if(token==null){
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        if (jwtUtil.isTokenExpired(token)) {
+            throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
+        }
+        String gestorID = jwtUtil.getKey(token);
+        if (gestorID == null){
             throw new RequestException("", HttpStatus.FORBIDDEN, "Token no valido");
         }
         Optional<Gestor> gestor = gestorService.findById(id);

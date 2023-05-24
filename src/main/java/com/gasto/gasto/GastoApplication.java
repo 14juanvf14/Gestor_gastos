@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @SpringBootApplication
 public class GastoApplication {
@@ -29,10 +30,17 @@ public class GastoApplication {
 				.email("admin@gasto.com").build();
 		gestor.setPassword(argon2.hash(1,1024,1, "99999"));
 		if(gestorService.findById(gestor.getId()).isPresent()){
-			gestorService.deleteById(gestor.getId());
-		}
-		gestorService.save(gestor);
+			if (!Objects.equals(gestorService.findById(gestor.getId()).get().getEmail(), "admin@gasto.com")){
+				gestorService.deleteById(gestor.getId());
+				gestorService.save(gestor);
+			}
+			else {
+			}
 
+		}
+		else {
+			gestorService.save(gestor);
+		}
 	}
 
 }

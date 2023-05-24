@@ -55,5 +55,6 @@ public interface GastoService {
      * @return {@link Gasto} retorna el objeto ya actualizado
      * @see Gasto
      */
-    Gasto updateGasto(Gasto gasto);
+    List<Gasto> findByUsuario(Long id);
+
 }
